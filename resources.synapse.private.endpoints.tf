@@ -49,8 +49,7 @@ resource "azurerm_private_dns_zone" "dns_zone" {
 resource "azurerm_private_dns_zone_virtual_network_link" "vnet_link" {
   count                 = var.existing_private_dns_zone == null && var.enable_private_endpoint ? 1 : 0
   name                  = "vnet-private-zone-link"
-  resource_group_name   = local.resource_group_name
-  private_dns_zone_name = var.existing_private_dns_zone == null ? azurerm_private_dns_zone.dns_zone.0.name : var.existing_private_dns_zone
+  private_dns_zone_id   = azurerm_private_dns_zone.dns_zone.0.id
   virtual_network_id    = var.existing_vnet_id
   registration_enabled  = true
   tags                  = merge({ "Name" = format("%s", "vnet-private-zone-link") }, var.add_tags, )
@@ -59,8 +58,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet_link" {
 resource "azurerm_private_dns_a_record" "a_rec" {
   count               = var.enable_private_endpoint ? 1 : 0
   name                = <<name of resource>>
-  zone_name           = var.existing_private_dns_zone == null ? azurerm_private_dns_zone.dns_zone.0.name : var.existing_private_dns_zone
-  resource_group_name = local.resource_group_name
+  private_dns_zone_id = azurerm_private_dns_zone.dns_zone.0.id
   ttl                 = 300
   records             = [data.azurerm_private_endpoint_connection.pip.0.private_service_connection.0.private_ip_address]
 }

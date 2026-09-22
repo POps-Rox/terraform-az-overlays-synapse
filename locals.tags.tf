@@ -10,4 +10,6 @@ locals {
     env        = var.environment
     workload   = var.workload_name
   } : {}
+
+  tags = merge(local.default_tags, var.tags, var.add_tags)
 }
