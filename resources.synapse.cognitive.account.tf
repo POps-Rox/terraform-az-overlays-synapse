@@ -28,7 +28,7 @@ resource "azurerm_cognitive_account" "cog" {
     }
   }
 
-  tags = local.default_tags
+  tags = local.tags
 
   lifecycle {
     ignore_changes = [customer_managed_key]
